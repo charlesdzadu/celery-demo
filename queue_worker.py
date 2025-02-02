@@ -16,4 +16,7 @@ app.conf.update(
 
 @app.task
 def add(x, y):
+    # add a delay to simulate a long running task
+    import time
+    time.sleep(10)
     return x + y
