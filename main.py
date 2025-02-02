@@ -13,9 +13,9 @@ def read_root():
 
 @app.get("/test-tasks")
 def read_item():
-    result = queue_worker.add.delay(4, 4)
+    task = queue_worker.add.delay(4, 4)
+    result = task.get(timeout=10, propagate=True)
     return {
         "task": "added",
-        "result_id": result.id,
-        "ready": result.ready(),
+        "result": result,
     }
