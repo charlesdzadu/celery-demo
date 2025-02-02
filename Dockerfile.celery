@@ -3,6 +3,9 @@ FROM python:3.13-slim
 # Install curl (and clean up apt caches)
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
+# Create a non-root group and user named "celeryuser" with /code as its home directory
+RUN groupadd -r celeryuser && useradd -r -g celeryuser -d /code celeryuser
+
 WORKDIR /code
 
 # Install Poetry using curl
@@ -16,16 +19,17 @@ COPY poetry.lock pyproject.toml ./
 
 RUN poetry config virtualenvs.create false
 
-
 # Install project dependencies
 RUN poetry install
 
 # Copy the rest of the project
 COPY . .
 
+# Change ownership of /code to celeryuser so that the non-root user has proper permissions
+RUN chown -R celeryuser:celeryuser /code
 
-RUN chown -R celeryuser:celeryuser /home/celeryuser
-
+# Switch to the non-root user
 USER celeryuser
 
+# Start the celery worker
 CMD ["celery", "-A", "queue_worker", "worker", "--loglevel=DEBUG"]
