@@ -24,4 +24,8 @@ RUN poetry install
 COPY . .
 
 
-CMD ["celery", "-A", "queue_worker", "worker", "--loglevel=info"]
+RUN chown -R celeryuser:celeryuser /home/celeryuser
+
+USER celeryuser
+
+CMD ["celery", "-A", "queue_worker", "worker", "--loglevel=DEBUG"]

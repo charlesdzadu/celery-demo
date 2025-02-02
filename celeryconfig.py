@@ -1,6 +1,7 @@
 import settings as s
 
 broker_url = f"{s.settings.REDIS_URL}/0"
+result_backend = f"{s.settings.REDIS_URL}/0"
 
 task_serializer = 'json'
 result_serializer = 'json'
