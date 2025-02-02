@@ -1,0 +1,17 @@
+FROM python:3.11
+WORKDIR /code
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+ENV PATH="/root/.local/bin:${PATH}"
+
+COPY poetry.lock pyproject.toml ./
+
+RUN poetry install --no-dev
+
+# Copy the entire project
+COPY . .
+
+# Expose the port that the application will run on
+EXPOSE 8000
+
+CMD ["celery", "-A", "queue_worker", "worker", "--loglevel=info"]
