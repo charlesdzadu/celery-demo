@@ -32,4 +32,4 @@ RUN chown -R celeryuser:celeryuser /code
 USER celeryuser
 
 # Start the celery worker
-CMD ["celery", "-A", "queue_worker", "worker", "--concurrency=8", "--loglevel=DEBUG"]
+CMD ["celery", "-A", "queue_worker", "worker", "--concurrency=32", "--loglevel=DEBUG"]

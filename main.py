@@ -13,7 +13,9 @@ def read_root():
 
 @app.get("/test-tasks")
 def read_item():
-    queue_worker.add.delay(4, 4)
+    # Add 100 tasks to the queue
+    for i in range(100):
+        queue_worker.add.delay(i, i)
     return {
         "task": "added",
     }
